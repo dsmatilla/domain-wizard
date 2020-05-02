@@ -56,6 +56,7 @@ func mainProcess(w http.ResponseWriter, req *http.Request) {
 		req.URL.Scheme = urlParsed.Scheme
 		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
 		req.Host = urlParsed.Host
+		w.Header().Add("Server", "WizDom.es/1.0.0")
 		proxy.ServeHTTP(w, req)
 	} else {
 		w.Header().Set("Strict-Transport-Security", "max-age=15768000 ; includeSubDomains")
