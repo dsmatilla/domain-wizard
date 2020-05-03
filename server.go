@@ -54,8 +54,7 @@ func mainProcess(w http.ResponseWriter, req *http.Request) {
 		proxy := httputil.NewSingleHostReverseProxy(urlParsed)
 		req.URL.Host = urlParsed.Host
 		req.URL.Scheme = urlParsed.Scheme
-		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
-		req.Host = urlParsed.Host
+		req.Header.Set("X-Forwarded-Host", req.Host)
 		w.Header().Add("Server", "WizDom.es/1.0.0")
 		proxy.ServeHTTP(w, req)
 	} else {
