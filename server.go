@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"os"
 	"strings"
+	"time"
 )
 
 func httpServer() {
@@ -42,8 +43,11 @@ func httpsServer() {
 			MinVersion:     tls.VersionTLS12,
 		},
 		Handler: logRequest(mux),
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 5 * time.Second,
 	}
 	server.TLSConfig.NextProtos = append(server.TLSConfig.NextProtos, acme.ALPNProto)
+	server.SetKeepAlivesEnabled(false)
 	server.ListenAndServeTLS("", "")
 }
 
@@ -65,6 +69,7 @@ func mainProcess(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(int(config.Status))
 		w.Write([]byte(config.Body))
 	}
+	req.Body.Close()
 }
 
 func cacheDir() string {
